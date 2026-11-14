@@ -78,8 +78,6 @@ export default function App() {
     );
   }
 
-  if (!user) return <Login onLogin={setUser} />;
-
   const doctors = backend.listDoctors ? backend.listDoctors() : [];
   const patients = backend.listPatients ? backend.listPatients() : [];
 
@@ -95,38 +93,42 @@ export default function App() {
 
   return (
     <ToastProvider>
-      <div className="app">
-        <TopBar
-          user={user}
-          locale={locale}
-          onLocaleChange={setLocaleState}
-          onLogout={() => setUser(null)}
-        />
+      {!user ? (
+        <Login onLogin={setUser} />
+      ) : (
+        <div className="app">
+          <TopBar
+            user={user}
+            locale={locale}
+            onLocaleChange={setLocaleState}
+            onLogout={() => setUser(null)}
+          />
 
-        <nav className="subnav">
-          {links.map((l) => (
-            <button
-              key={l.key}
-              className={`subnav__link${l.active ? " subnav__link--active" : ""}`}
-              onClick={l.action}
-            >
-              {l.label}
-            </button>
-          ))}
-        </nav>
+          <nav className="subnav">
+            {links.map((l) => (
+              <button
+                key={l.key}
+                className={`subnav__link${l.active ? " subnav__link--active" : ""}`}
+                onClick={l.action}
+              >
+                {l.label}
+              </button>
+            ))}
+          </nav>
 
-        <main className="main">
-          {page === "daily" && <DailyView backend={backend} user={user} perms={perms} doctors={doctors} patients={patients} />}
-          {page === "patients" && <PatientsPage backend={backend} user={user} perms={perms} />}
-          {page === "users" && <UsersPage backend={backend} user={user} perms={perms} />}
-        </main>
+          <main className="main">
+            {page === "daily" && <DailyView backend={backend} user={user} perms={perms} doctors={doctors} patients={patients} />}
+            {page === "patients" && <PatientsPage backend={backend} user={user} perms={perms} />}
+            {page === "users" && <UsersPage backend={backend} user={user} perms={perms} />}
+          </main>
 
-        <footer className="app-footer">
-          <span>{t("appName")}</span>
-          <span>·</span>
-          <span>{t("appTagline")}</span>
-        </footer>
-      </div>
+          <footer className="app-footer">
+            <span>{t("appName")}</span>
+            <span>·</span>
+            <span>{t("appTagline")}</span>
+          </footer>
+        </div>
+      )}
     </ToastProvider>
   );
 }
