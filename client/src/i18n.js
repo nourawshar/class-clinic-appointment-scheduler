@@ -413,7 +413,7 @@ export function setLocale(locale) {
  * @returns {string}
  */
 export function t(key) {
-  return (KEYS[key] && KEYS[key][currentLocale]) || KEYS[key].en || key;
+  return (TRANSLATIONS[currentLocale] && TRANSLATIONS[currentLocale][key]) || TRANSLATIONS.en[key] || key;
 }
 
 /** Returns the list of currently available locales. */
