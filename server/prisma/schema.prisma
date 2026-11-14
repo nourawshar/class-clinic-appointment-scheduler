@@ -1,0 +1,102 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  admin
+  coordinator
+  doctor
+  assistant
+  translator
+}
+
+enum AppointmentType {
+  randevu
+  muayene
+  tedavi
+  cerrahi
+  prova
+}
+
+enum AppointmentStatus {
+  pending
+  canceled
+  confirmed
+  arrived
+  completed
+  notAttended
+  inTreatment
+  postponed
+  notReached
+}
+
+enum AuditAction {
+  create
+  update
+  delete
+  statusChange
+}
+
+model User {
+  id           String    @id @default(cuid())
+  username     String    @unique
+  passwordHash String
+  firstName    String
+  lastName     String
+  role         Role
+  doctorId     String?
+  doctor       Doctor?   @relation(fields: [doctorId], references: [id])
+  isActive     Boolean   @default(true)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  auditLogs AuditLog[]
+}
+
+model Doctor {
+  id         String   @id @default(cuid())
+  firstName  String
+  lastName   String
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+
+  appointments Appointment[]
+  users      User[]
+}
+
+model Patient {
+  id         String   @id @default(cuid())
+  name       String
+  createdAt  DateTime @default(now())
+}
+
+model Appointment {
+  id                String    @id @default(cuid())
+  doctorId          String
+  doctor            Doctor    @relation(fields: [doctorId], references: [id])
+  patientName       String
+  date              String
+  startTime         String
+  durationMinutes   Int
+  type              AppointmentType
+  status            AppointmentStatus @default(pending)
+  note              String?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  action     AuditAction
+  entityType String
+  entityId   String
+  details    Json
+  createdAt  DateTime @default(now())
+}
