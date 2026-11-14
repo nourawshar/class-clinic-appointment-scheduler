@@ -12,12 +12,15 @@ export const TYPE_OPTIONS = [
 
 /** Selectable appointment statuses. */
 export const STATUS_OPTIONS = [
-  { value: "planned",      key: "statusPlanned" },
+  { value: "pending",      key: "statusPending" },
+  { value: "canceled",     key: "statusCanceled" },
   { value: "confirmed",    key: "statusConfirmed" },
-  { value: "in_progress",  key: "statusInProgress" },
+  { value: "arrived",      key: "statusArrived" },
   { value: "completed",    key: "statusCompleted" },
-  { value: "cancelled",    key: "statusCancelled" },
-  { value: "no_show",      key: "statusNoShow" },
+  { value: "notAttended",  key: "statusNotAttended" },
+  { value: "inTreatment",  key: "statusInTreatment" },
+  { value: "postponed",    key: "statusPostponed" },
+  { value: "notReached",   key: "statusNotFound" },
 ];
 
 /**

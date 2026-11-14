@@ -1,6 +1,5 @@
-// Class Clinic — root app: auth boot, language, permissions, page routing.
 import { useMemo, useEffect, useState } from "react";
-import { setLocale, locales, t } from "./i18n.js";
+import { setLocale, t } from "./i18n.js";
 import { ToastProvider } from "./toast.jsx";
 import { PERMISSIONS } from "./constants.js";
 import Login from "./components/Login.jsx";
@@ -11,6 +10,7 @@ import TopBar from "./components/TopBar.jsx";
 import Spinner from "./components/Spinner.jsx";
 
 export default function App() {
+  window.__appStart = true;
   const [backend, setBackend] = useState(null);
   const [user, setUser] = useState(null);
   const [locale, setLocaleState] = useState(() => {
@@ -37,15 +37,14 @@ export default function App() {
           }
         }
       } catch (err) {
-        // Network / server unavailable: show a friendly boot error.
-        if (!cancelled) {
-          setBackend(null);
-        }
+        if (!cancelled) setBackend(null);
       } finally {
         if (!cancelled) setBusy(false);
       }
     })();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   useEffect(() => {
@@ -57,9 +56,6 @@ export default function App() {
     canManagePatients: PERMISSIONS.managePatients(user?.role),
     canManageUsers: PERMISSIONS.manageUsers(user?.role),
   }), [user?.role]);
-
-  const doctors = backend.listDoctors ? backend.listDoctors() : [];
-  const patients = backend.listPatients ? backend.listPatients() : [];
 
   if (busy) {
     return (
@@ -83,6 +79,9 @@ export default function App() {
   }
 
   if (!user) return <Login onLogin={setUser} />;
+
+  const doctors = backend.listDoctors ? backend.listDoctors() : [];
+  const patients = backend.listPatients ? backend.listPatients() : [];
 
   const links = [
     { key: "daily", label: t("pageDaily"), active: page === "daily", action: () => setPage("daily") },

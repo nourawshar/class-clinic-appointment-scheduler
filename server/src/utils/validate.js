@@ -11,6 +11,7 @@ const AppointmentType = {
   tedavi: "tedavi",
   cerrahi: "cerrahi",
   prova: "prova",
+  implant: "implant",
 };
 
 // allowed appointment statuses

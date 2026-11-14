@@ -158,7 +158,7 @@ export function makeSeedAppointments(today) {
       startTime: "14:00",
       duration: 60,
       type: "cerrahi",
-      status: "planned",
+      status: "pending",
       note: "Impacted wisdom tooth extraction.",
     },
     {
@@ -169,7 +169,7 @@ export function makeSeedAppointments(today) {
       startTime: "08:30",
       duration: 45,
       type: "tedavi",
-      status: "planned",
+      status: "pending",
       note: "Fill on the upper right.",
     },
     {
@@ -191,7 +191,7 @@ export function makeSeedAppointments(today) {
       startTime: "09:30",
       duration: 120,
       type: "implant",
-      status: "in_progress",
+      status: "inTreatment",
       note: "Implant placement; patient under local anesthesia.",
     },
     {
@@ -202,7 +202,7 @@ export function makeSeedAppointments(today) {
       startTime: "15:00",
       duration: 45,
       type: "muayene",
-      status: "cancelled",
+      status: "canceled",
       note: "Rescheduled to next week.",
     },
     {
@@ -213,7 +213,7 @@ export function makeSeedAppointments(today) {
       startTime: "13:00",
       duration: 30,
       type: "randevu",
-      status: "planned",
+      status: "pending",
       note: "Follow-up consultation.",
     },
     {
@@ -224,7 +224,7 @@ export function makeSeedAppointments(today) {
       startTime: "08:15",
       duration: 45,
       type: "muayene",
-      status: "in_progress",
+      status: "inTreatment",
       note: "Routine follow-up.",
     },
     {

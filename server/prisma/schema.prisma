@@ -21,6 +21,7 @@ enum AppointmentType {
   tedavi
   cerrahi
   prova
+  implant
 }
 
 enum AppointmentStatus {

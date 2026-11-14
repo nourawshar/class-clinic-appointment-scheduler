@@ -112,7 +112,12 @@ export async function updateUser(id, payload) {
   });
 }
 
-/** DELETE /api/users/:id */
-export async function deleteUser(id) {
-  return request(`/users/${encodeURIComponent(String(id))}`, { method: "DELETE" });
+/** GET /api/doctors -> [{...}] */
+export async function listDoctors() {
+  return request("/doctors");
+}
+
+/** GET /api/patients -> [{...}] */
+export async function listPatients() {
+  return request("/patients");
 }
