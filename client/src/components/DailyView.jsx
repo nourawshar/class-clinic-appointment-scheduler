@@ -43,26 +43,16 @@ export default function DailyView({ backend, user, perms, doctors, patients }) {
   const [navError, setNavError] = useState("");
   const [modal, setModal] = useState(null); // { mode: "add" | "edit" | "view", appointment }
 
-  const fetchList = useCallback(async () => {
+  useEffect(() => {
     let cancelled = false;
     setLoading(true);
     setNavError("");
-    try {
-      const data = await backend.getAppointmentsForDate(date);
-      if (!cancelled) setList(data);
-    } catch (err) {
-      if (!cancelled) setNavError(friendlyError(err));
-      notify(friendlyError(err), "error");
-    } finally {
-      if (!cancelled) setLoading(false);
-    }
+    backend.getAppointmentsForDate(date)
+      .then((data) => { if (!cancelled) setList(data); })
+      .catch((err) => { if (!cancelled) setNavError(friendlyError(err)); notify(friendlyError(err), "error"); })
+      .finally(() => { if (!cancelled) setLoading(false); });
     return () => { cancelled = true; };
   }, [backend, date]);
-
-  useEffect(() => {
-    const cleanup = fetchList();
-    return cleanup;
-  }, [fetchList]);
 
   const openAdd = () => setModal({ mode: "add", appointment: null });
   const openView = (apt) => setModal({ mode: "view", appointment: apt });
@@ -78,7 +68,8 @@ export default function DailyView({ backend, user, perms, doctors, patients }) {
       } else {
         await backend.createAppointment(payload);
       }
-      await fetchList();
+      const data = await backend.getAppointmentsForDate(date);
+      setList(data);
       if (modal?.mode === "view") closeModal();
       notify(t("saveSuccess"), "success");
     } catch (err) {
@@ -89,7 +80,8 @@ export default function DailyView({ backend, user, perms, doctors, patients }) {
   const removeAppointment = async (id) => {
     try {
       await backend.deleteAppointment(id);
-      await fetchList();
+      const data = await backend.getAppointmentsForDate(date);
+      setList(data);
       if (modal?.mode === "view") closeModal();
       notify(t("deleteConfirmTitle"), "success");
     } catch (err) {
