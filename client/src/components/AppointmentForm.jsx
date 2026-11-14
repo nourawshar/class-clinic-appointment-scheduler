@@ -1,5 +1,5 @@
 // Class Clinic — add / edit appointment form.
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { t, locale } from "../i18n.js";
 import { formatDateShort } from "../format.js";
 import { TYPE_OPTIONS, STATUS_OPTIONS } from "../constants.js";
