@@ -51,12 +51,28 @@ export default function AppointmentForm({
   });
   const [errors, setErrors] = useState({});
   const [patientQuery, setPatientQuery] = useState("");
+  const [patientResults, setPatientResults] = useState([]);
   const { notify } = useToast();
 
   const set = (field, value) => {
     setForm((prev) => ({ ...prev, [field]: value }));
     if (errors[field]) setErrors((prev) => { delete prev[field]; return prev; });
   };
+
+  // Auto-select first matching patient when typing
+  useEffect(() => {
+    if (patientQuery.trim()) {
+      const match = patients.find((p) =>
+        p.name.toLowerCase().includes(patientQuery.trim().toLowerCase())
+      );
+      if (match) set("patientId", match.id);
+    } else {
+      set("patientId", "");
+    }
+    setPatientResults(patients.filter(
+      (p) => p.name && p.name.toLowerCase().includes(patientQuery.toLowerCase())
+    ));
+  }, [patientQuery, patients]);
 
   const validate = () => {
     const next = {};
@@ -81,11 +97,7 @@ export default function AppointmentForm({
     onSave({ ...form });
   };
 
-  const filteredPatients = patients.filter(
-    (p) =>
-      p.name &&
-      p.name.toLowerCase().includes((patientQuery || "").toLowerCase())
-  );
+
 
   const paste = (field, value) => {
     set(field, value);
@@ -141,7 +153,7 @@ export default function AppointmentForm({
             list="patient-options"
           />
           <datalist id="patient-options">
-            {filteredPatients.map((p) => (
+            {patientResults.map((p) => (
               <option key={p.id} value={p.name} />
             ))}
           </datalist>
@@ -152,7 +164,7 @@ export default function AppointmentForm({
 
           {/* Searchable dropdown of existing patients. */}
           <ul className="patient-list">
-            {filteredPatients.map((p) => (
+            {patientResults.map((p) => (
               <li
                 key={p.id}
                 className="patient-list__item"
@@ -162,7 +174,7 @@ export default function AppointmentForm({
               </li>
             ))}
             {!patientQuery && <li className="patient-list__placeholder">{t("searchPlaceholder")}</li>}
-            {patientQuery && !filteredPatients.length && (
+            {patientQuery && !patientResults.length && (
               <li className="patient-list__empty">{t("noData")}</li>
             )}
           </ul>
