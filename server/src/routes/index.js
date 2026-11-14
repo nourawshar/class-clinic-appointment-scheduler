@@ -7,6 +7,7 @@ module.exports = {
   auth: require("./auth"),
   doctors: require("./doctors"),
   patients: require("./patients"),
+  users: require("./users"),
   appointments: require("./appointments"),
   audit: require("./audit"),
   health: require("./health"),

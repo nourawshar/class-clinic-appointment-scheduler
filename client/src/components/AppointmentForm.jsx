@@ -157,7 +157,7 @@ export default function AppointmentForm({
               <option key={p.id} value={p.name} />
             ))}
           </datalist>
-          {patientQuery && !filteredPatients.length && (
+          {patientQuery && !patientResults.length && (
             <p className="field__error">{t("noData")}</p>
           )}
           {errors.patientId && <p className="field__error">{errors.patientId}</p>}
@@ -168,7 +168,10 @@ export default function AppointmentForm({
               <li
                 key={p.id}
                 className="patient-list__item"
-                onClick={() => paste("patientId", p.id)}
+                onClick={() => {
+                  paste("patientId", p.id);
+                  setPatientQuery(p.name);
+                }}
               >
                 {p.name}
               </li>

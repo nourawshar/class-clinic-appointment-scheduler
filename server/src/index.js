@@ -28,6 +28,7 @@ const patientsRoutes = require("./routes/patients");
 const appointmentsRoutes = require("./routes/appointments");
 const auditRoutes = require("./routes/audit");
 const healthRoutes = require("./routes/health");
+const usersRoutes = require("./routes/users");
 
 const app = express();
 
@@ -61,6 +62,7 @@ app.use(
 app.use("/api", authRoutes);
 app.use("/api", doctorsRoutes);
 app.use("/api", patientsRoutes);
+app.use("/api", usersRoutes);
 app.use("/api", appointmentsRoutes);
 app.use("/api", auditRoutes);
 app.use("/api", healthRoutes);
